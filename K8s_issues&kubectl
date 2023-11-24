@@ -1,0 +1,34 @@
+Storage account size issue in pod we need to increase the spaces
+https://github.com/kubernetes/ingress-nginx/issues/4825
+
+Restriction issue
+https://medium.com/@maninder.bindra/using-nginx-ingress-controller-to-restrict-access-by-ip-ip-whitelisting-for-a-service-deployed-to-bd5c86dc66d6
+
+Country access block on k8s 
+https://stackoverflow.com/questions/70155464/block-country-by-geoip-with-nginx-ingress-controller-and-modsecurity
+
+SonarQube setup with branch plugin
+https://cigdemkadakoglu.medium.com/sonarqube-installation-on-ubuntu-20-04-with-community-branch-plugin-53e20cbded08
+
+ Roll back deployment docs 
+https://stackoverflow.com/questions/56291964/how-to-roll-back-a-deployment-to-a-previous-revision-automatically-when-deploymet
+
+
+generating csr for ssl
+https://csrgenerator.com/
+
+
+Restrict access 
+https://medium.com/@maninder.bindra/using-nginx-ingress-controller-to-restrict-access-by-ip-ip-whitelisting-for-a-service-deployed-to-bd5c86dc66d6
+
+other issues and command
+https://www.sqlshack.com/azure-kubernetes-service-aks-managing-sql-server-database-files/
+
+
+for checking the public access inside the container/pods use this command
+curl -4 icanhazip.com
+
+
+
+Have you been in situations where your corporate rules don’t allow you to run build/test pipelines on Azure provided agents? Or a situation where you want to execute multiple pipelines in parallel? If you are tired of provisioning Virtual Machines by now, then look no further…
+https://ghoshasish99.medium.com/azure-devops-self-hosted-agents-on-kubernetes-51685fde9a14
