@@ -32,3 +32,12 @@ curl -4 icanhazip.com
 
 Have you been in situations where your corporate rules don’t allow you to run build/test pipelines on Azure provided agents? Or a situation where you want to execute multiple pipelines in parallel? If you are tired of provisioning Virtual Machines by now, then look no further…
 https://ghoshasish99.medium.com/azure-devops-self-hosted-agents-on-kubernetes-51685fde9a14
+
+
+pull image from ecr (aws) and apply to aks (azure)
+
+https://medium.com/@dikshantdevops/configure-ecr-with-aks-6f84b6c10448
+
+
+Use GPUs for compute-intensive workloads on Azure Kubernetes Service (AKS) for heavy images
+https://learn.microsoft.com/en-us/azure/aks/gpu-cluster
