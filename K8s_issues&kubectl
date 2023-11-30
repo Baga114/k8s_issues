@@ -38,6 +38,8 @@ pull image from ecr (aws) and apply to aks (azure)
 
 https://medium.com/@dikshantdevops/configure-ecr-with-aks-6f84b6c10448
 
+this is how should image name look like - 400926585409.dkr.ecr.us-east-1.amazonaws.com/dilbag114:latest
+
 
 Use GPUs for compute-intensive workloads on Azure Kubernetes Service (AKS) for heavy images
 https://learn.microsoft.com/en-us/azure/aks/gpu-cluster
