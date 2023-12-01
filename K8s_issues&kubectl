@@ -43,3 +43,19 @@ this is how should image name look like - 400926585409.dkr.ecr.us-east-1.amazona
 
 Use GPUs for compute-intensive workloads on Azure Kubernetes Service (AKS) for heavy images
 https://learn.microsoft.com/en-us/azure/aks/gpu-cluster
+
+
+***************************rewriting*****************************
+for rewriting in ingress do this only work for frontend
+  - host: dev-toa.cookandboardman.io
+    http:
+      paths:
+      - backend:
+          service:
+            name: toa-frontend
+            port:
+              number: 80
+        path: /
+        pathType: ImplementationSpecific
+nginx.ingress.kubernetes.io/rewrite-target: /$2
+****************************************************************
