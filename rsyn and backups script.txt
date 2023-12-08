@@ -1,0 +1,87 @@
+rsync -arzvh -e ssh  /home/user/example ubuntu@51.20.140.106:/home/ubuntu
+
+password will promt
+
+*********
+db backup script
+
+#!/bin/bash
+SHELL=/bin/bash
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/root/.local/bin
+
+# MySQL database credentials
+DB_USER='root'
+DB_PASS='y3st45@#$'
+
+# Create a directory with the current date for SQL backups
+mkdir -p /var/www/Backups/DB/$(date +%F)
+#mkdir -p "/var/www/Backups/DB/$(date +%F)"
+
+# Get the list of DBs in the MySQL server
+mysql -u"$DB_USER" -p"$DB_PASS" -e "show databases" | grep -v -E "^Database|information_schema|performance_schema|phpmyadmin" > "/var/www/Backups/DB/$(date +%F)/dblist.txt"
+
+# Dump each database and save it in the backup directory
+cat "/var/www/Backups/DB/$(date +%F)/dblist.txt" | while read i; do
+    mysqldump -u"$DB_USER" -p"$DB_PASS" "$i" > "/var/www/Backups/DB/$(date +%F)/$i-db-bak-$(date +%F).sql"
+done
+cd /var/www/Backups/DB/$(date +%F)
+
+#sending files to the backup server
+curdate=`date +%Y-%m-%-d`
+HOST='u229864.your-storagebox.de'
+USER='u229864'
+PASSWD='jLWP6xnL78HxiPTG'
+
+ftp -pnv $HOST <<EOF
+user $USER $PASSWD
+prompt
+mkdir /Staging-server-135/DB/$curdate
+cd /Staging-server-135/DB/$curdate
+mput *.sql
+ls -la
+bye
+EOF
+
+#removing the files from local
+rm -rf /var/www/Backups/DB/$(date --iso)
+
+***********************************************
+file backup script.........
+#!/bin/bash
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+
+############################### Backing up Plesk server Domain Files ###############################
+echo -e "\n`date` - Backing up staging server Files..." >> $BACKUPLOG
+mkdir -p /var/www/Backups/FILES/$(date --iso)
+cd /var/www/Backups/FILES/$(date --iso)/
+
+tar zcvf 2topadmindev.clienturls.com-$(date +%F).tar.gz /var/www/2topadmindev.clienturls.com
+tar zcvf insulationsnakes.essentialdemo.com-$(date +%F).tar.gz /var/www/insulationsnakes.essentialdemo.com
+tar zcvf marbleapi-stage.essentialdemo.com-$(date +%F).tar.gz /var/www/marbleapi-stage.essentialdemo.com
+tar zcvf mobile-shop.clienturls.com-$(date +%F).tar.gz /var/www/mobile-shop.clienturls.com
+tar zcvf onelinkstageapi.customerdemourl.com-$(date +%F).tar.gz /var/www/onelinkstageapi.customerdemourl.com
+tar zcvf paterson-wp.essentialdemo.com-$(date +%F).tar.gz /var/www/paterson-wp.essentialdemo.com
+tar zcvf po-ack-api.customerdemourl.com-$(date +%F).tar.gz /var/www/po-ack-api.customerdemourl.com
+tar zcvf transportlogistics.essentialdemo.com-$(date +%F).tar.gz /var/www/transportlogistics.essentialdemo.com
+
+############## Copying Backup to FTP Server #################
+
+curdate=`date +%Y-%m-%-d`
+HOST='u229864.your-storagebox.de'
+USER='u229864'
+PASSWD='jLWP6xnL78HxiPTG'
+
+ftp -pnv $HOST <<EOF
+user $USER $PASSWD
+prompt 
+mkdir /Staging-server-135/FILES/$curdate
+cd /Staging-server-135/FILES/$curdate
+mput *.tar.gz
+ls -la
+bye
+EOF
+
+rm -rf /var/www/Backups/FILES/$(date --iso)
+*******************************************************
