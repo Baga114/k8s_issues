@@ -1,0 +1,1 @@
+sudo apt install php7.4-{bcmath,common,curl,fpm,gd,intl,mbstring,mysql,soap,xml,xsl,zip,cli}
