@@ -45,17 +45,39 @@ Use GPUs for compute-intensive workloads on Azure Kubernetes Service (AKS) for h
 https://learn.microsoft.com/en-us/azure/aks/gpu-cluster
 
 
-***************************rewriting*****************************
-for rewriting in ingress do this only work for frontend
-  - host: dev-toa.cookandboardman.io
-    http:
-      paths:
-      - backend:
-          service:
-            name: toa-frontend
-            port:
-              number: 80
-        path: /
-        pathType: ImplementationSpecific
-nginx.ingress.kubernetes.io/rewrite-target: /$2
-****************************************************************
+***************************rewriting issue in ingress might only work in frontend *****************************
+add below line in docker file for nginx like below file
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+*************below is example dockerfile******************
+FROM node:18.18-alpine3.17 AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+ 
+FROM nginx:alpine
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/build /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+
+
+*******add below conf file too*************
+server {
+    listen       80;
+    server_name  localhost;
+ 
+    location / {
+        root   /usr/share/nginx/html;
+        try_files $uri $uri/ /index.html;
+        index  index.html index.htm;
+    }
+ 
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   /usr/share/nginx/html;
+    }
+ 
+}
+***********************************rewriting issue in ingress might only work in frontend************************
