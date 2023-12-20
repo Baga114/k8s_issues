@@ -2,7 +2,6 @@ Storage account size issue in pod we need to increase the spaces
 https://github.com/kubernetes/ingress-nginx/issues/4825
 
 
-
 install ingress on aks
 https://learn.microsoft.com/en-us/azure/aks/ingress-basic?tabs=azure-cli
 
