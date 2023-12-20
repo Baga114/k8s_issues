@@ -1,0 +1,114 @@
+Route Issue: Getting 404 on Page Refresh
+
+Solution:
+Step 1. Update Dockerfile to copy custom nginx.conf
+
+FROM node:18.18-alpine3.17 AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+FROM nginx:alpine
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/build /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+
+Step 2. Add Custom nginx.conf file 
+
+server {
+    listen       80;
+    server_name  localhost; 
+    location / {
+        root   /usr/share/nginx/html;
+        try_files $uri $uri/ /index.html;
+        index  index.html index.htm;
+    } 
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   /usr/share/nginx/html;
+    } 
+}
+
+
+
+
+
+
+
+CORS Issue - Storage Account
+Solution: 
+Step 1. Add Origin URLs in Storage Account CORS Policy
+Home > Storage Account > CORS POLICY
+Update Below Values
+Allowed origins -        URLs 
+Allowed methods -    Request Methods (GET, POST, DELETE etc)
+Allowed headers -     *
+Exposed headers -    *
+Max age -                   300
+CORS Issue - Backend web config
+Solution: 
+Step 1. Update web config file with below content - change as per requirement
+
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <location path="." inheritInChildApplications="false">
+    <system.webServer>
+      <handlers>
+        <add name="aspNetCore" path="*" verb="*" modules="AspNetCoreModuleV2" resourceType="Unspecified" />
+      </handlers>
+      <aspNetCore processPath="dotnet" arguments=".\TOA.Api.Host.dll" stdoutLogEnabled="false" stdoutLogFile=".\logs\stdout" hostingModel="inprocess" />
+    </system.webServer>
+  </location>
+    <system.webServer>
+      <httpProtocol>
+        <customHeaders>           
+      <add name="Access-Control-Allow-Methods" value="GET,POST,OPTIONS" />  
+          <add name="Access-Control-Allow-Headers" value="Content-Type, soapaction" />         
+        </customHeaders>
+      </httpProtocol>
+   </system.webServer>
+</configuration>
+<!--ProjectGuid: ad21f819-c24f-4fbb-8033-491e424b6349→
+
+Step 2. Delete WEBDAV module if exists
+Go to IIS > Sitename > Modules
+
+
+Build Deployment on VM - File copy Issue
+
+Solution:
+Step 1. Password should not consist of symbol ‘@’
+Step 2. Stop App pool and Site
+Step 3. Use mirror lftp command for overwrite existing files
+sudo lftp -e "mirror --overwrite -R ./build-folder/ .;quit" -u ftpusername,ftp_password ip
+Ingress Rules - Restrict Access to few IPs
+Solution: 
+Step 1. Use annotation in ingress.yaml file
+annotations:
+    nginx.ingress.kubernetes.io/whitelist-source-range: required_ips here
+
+Step 2. Set controller.service.externalTrafficPolicy=Local
+Kubectl get svc -n ingress-ns
+Kubectl edit svc controller.service -n ingress-ns
+Set external Traffic Policy=Local
+Save and Exit
+ 
+Step 3: Apply the changes on cluster and restart the POD
+Upload Limit Issue - Unable to upload files greater than 2MB
+Solution: 
+Step 1. Update the below annotation in ingress.yaml
+annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: 50m
+
+Step 2: Apply the changes on cluster and restart the POD
+Ingress Controller Installation Issue
+Solution:
+Step 1. Install and configure ingress as per AKS, Otherwise ingress controller does not work properly.
+Modify the helm install command for ingress controller installation
+helm install ingress-nginx ingress-nginx/ingress-nginx --create-namespace --namespace ingress-basic --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-health-probe-request-path"=/healthz
+
+Use below link for further reference.
+https://learn.microsoft.com/en-us/azure/aks/ingress-basic?tabs=azure-cli
