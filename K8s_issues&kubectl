@@ -85,3 +85,8 @@ server {
  
 }
 ***********************************rewriting issue in ingress might only work in frontend************************
+
+
+install kubectl on window
+
+https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/#install-nonstandard-package-tools
