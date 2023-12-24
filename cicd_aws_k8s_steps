@@ -1,0 +1,108 @@
+https://www.stacksimplify.com/aws-eks/aws-devops-eks/learn-to-master-devops-on-aws-eks-using-aws-codecommit-codebuild-codepipeline/
+
+
+aws eks --region us-east-1 update-kubeconfig --name codetest
+
+
+https://repost.aws/questions/QUiotRHmOtSXaL1gOEZS16kA/kubectl-error-you-must-be-logged-in-to-the-server-unauthorized-when-accessing-eks-cluster
+for error in deployment use should follow above docs
+
+
+Create STS Assume IAM Role for CodeBuild to interact with AWS EKS
+
+Export your Account ID
+export ACCOUNT_ID=757323807332
+
+# Set Trust Policy
+
+
+$ACCOUNT_ID = "757323807332"
+$IAM_USER_NAME = "test"
+
+$TRUST = @"
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::${ACCOUNT_ID}:user/${IAM_USER_NAME}"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+"@
+
+
+
+# Verify inside Trust policy, your account id got replacd
+echo $TRUST
+
+# Create IAM Role for CodeBuild to Interact with EKS
+aws iam create-role --role-name EksCodeBuildKubectlRole --assume-role-policy-document "$TRUST" --output text --query 'Role.Arn'
+
+#arn:aws:iam::757323807332:role/EksCodeBuildKubectlRole
+
+# Define Inline Policy with eks Describe permission in a file iam-eks-describe-policy
+echo '{ "Version": "2012-10-17", "Statement": [ { "Effect": "Allow", "Action": "eks:Describe*", "Resource": "*" } ] }' > C:\Windows\Temp/iam-eks-describe-policy
+
+# Associate Inline Policy to our newly created IAM Role
+
+aws iam put-role-policy --role-name EksCodeBuildKubectlRole --policy-name eks-describe --policy-document file://C:/Windows/Temp/iam-eks-describe-policy
+
+
+# Verify the same on Management Console
+
+*******end********
+
+
+******Update EKS Cluster aws-auth ConfigMap with new role created in previous step*******
+
+# Verify what is present in aws-auth configmap before change
+kubectl get configmap aws-auth -o yaml -n kube-system
+
+# Export your Account ID
+export ACCOUNT_ID=180789647333
+
+# Set ROLE value
+$ACCOUNT_ID = "757323807332" 
+
+$ROLE = @"
+    - rolearn: arn:aws:iam::${ACCOUNT_ID}:role/EksCodeBuildKubectlRole
+      username: test
+      groups:
+        - system:masters
+"@
+
+
+# Get current aws-auth configMap data and attach new role info to it
+#kubectl get -n kube-system configmap/aws-auth -o yaml | awk "/mapRoles: \|/{print;print \"$ROLE\";next}1" > //C:/Windows/Temp//aws-auth-patch.yml
+# Patch the aws-auth configmap with new role
+before that create file aws-auth-patch.yml and add below details
+apiVersion: v1
+data:
+  mapRoles: |
+    - rolearn: arn:aws:iam::757323807332:role/EksCodeBuildKubectlRole
+      username: system:node:{{EC2PrivateDNSName}}
+      groups:
+        - system:bootstrappers
+        - system:nodes
+
+kubectl patch configmap/aws-auth -n kube-system --patch "$(Get-Content -Raw C:\Windows\Temp\aws-auth-patch.yml)"
+
+
+# Verify what is updated in aws-auth configmap after change
+kubectl get configmap aws-auth -o yaml -n kube-system
+
+
+********
+Update EKS Cluster aws-auth ConfigMap with new role created in previous step******* end *****
+
+kubectl patch configmap/aws-auth -n kube-system --patch "$(cat /tmp/aws-auth-patch.yml)"
+
+
+aws sts assume-role --role-arn arn:aws:iam::757323807332:role/EksCodeBuildKubectlRole --role-session-name codebuild-kubectl --duration-seconds 900
+
+
+kubectl patch configmap/aws-auth -n kube-system --patch "$(cat C:\Windows\Temp/aws-auth-patch.yml)"
