@@ -1,0 +1,7 @@
+install multiplate ingress follow below links
+
+https://blog.cpolydorou.net/2022/05/running-multiple-nginx-ingress.html
+
+https://github.com/cpolydorou/K8sSamples/blob/main/117-AKS-NGINX-MultipleIngressControllers-001/201-K8s-Deployments/111-K8s-NGINX-Internal-001/2-helm.sh
+
+helm install nginx-ingress-internal ingress-nginx/ingress-nginx --create-namespace --namespace internal-nginx --set controller.ingressClassResource.name="internal-nginx" --set controller.ingressClassResource.controllerValue="k8s.io/internal-ingress-nginx" --set controller.service.public="false" --set controller.service.annotations.'service\.beta\.kubernetes\.io/azure-load-balancer-internal'="true" --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-health-probe-request-path"=/healthz

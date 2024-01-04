@@ -21,3 +21,5 @@ https://dev.to/ileriayo/adding-free-ssltls-on-kubernetes-using-certmanager-and-l
 
 one more offical docs for reffernce 
 https://cert-manager.io/docs/tutorials/getting-started-aks-letsencrypt/
+
+keep in mind change to nginx
