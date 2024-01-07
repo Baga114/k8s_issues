@@ -1,3 +1,7 @@
 https://cigdemkadakoglu.medium.com/sonarqube-installation-on-ubuntu-20-04-with-community-branch-plugin-53e20cbded08
 
 follow above documents for sonar installation 
+
+intigrate sonar with aws codebuild in buildspce.yml file follow below link
+
+https://alexanderhose.com/integrate-sonarqube-with-codepipeline/
