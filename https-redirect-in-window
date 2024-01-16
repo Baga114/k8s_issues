@@ -1,0 +1,10 @@
+https://www.ssl.com/how-to/redirect-http-to-https-with-windows-iis-10/
+follow above url for redirecting the site to https on window
+
+note add 
+in set 10 Action add below details
+https://{HTTP_HOST}/{R:1}
+
+not this
+https://{HTTP_HOST}/{REQUEST_URI}
+keep in mind this
