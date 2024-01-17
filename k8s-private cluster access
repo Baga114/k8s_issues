@@ -1,0 +1,11 @@
+for acccesing the private cluster you need to follow below steps
+1. lanuch vm in same vnet you will be able to access the private cluster
+2. use port forwarding to connect to local add details
+i am using termuis
+in label give any names 
+local port number = 443
+bind address = 127.0.0.1
+intermediate host = give any name
+Destination address = copy the line from kube config like k8s-pri-cluster-dns-u4a3z1oi.0ddcad0b-96f5-4fd6-8b6a-db94841b58de.privatelink.centralus.azmk8s.io
+Destination port number = 443
+thats all for window and linux
