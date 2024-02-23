@@ -1,0 +1,96 @@
+Install and Configure Internet Information Services for Window Server 
+Step 1: Open Server Manager simply type “Server Manager” with the start menu open, and it should be found in the search.
+ 
+
+Step 2: Wait for it to open, Now click on ADD ROLE AND FEATURES
+ 
+
+Step 3: On the Next screen, click the Next button.
+ 
+
+Step 4: Select Role-based or feature-based installation and click Next.
+ 
+Step 5: Select Server from servers list.
+ 
+
+Step 6: Click the checkbox “Web Server (IIS)” in the “select server roles” window, a new window will open to specify additional functions, simply click on the ‘Add Features’ button. When done, click Next Button.
+ 
+
+ 
+
+Step 7: We won’t install additional features, so just click Next on this window.
+ 
+Step 8: Click next button again
+ 
+
+Step 9: You can install additional IIS services Now or just click Next to install the defaults.
+ 
+Step 10: No reboot should be required with a standard IIS installation, however, if you remove the role a reboot will be needed.
+ 
+
+Step 11: We just finished installing IIS. Now let’s go to the setup part.
+ 
+Step 12: Open Server Manager, select IIS, right-click the server and select IIS Manager.
+ 
+
+Step 13: Right-click the Sites node in the Connections window tree and click Add Site.
+ 
+Then expand server and expand sites. And Create site content Folder in C:\inetpub\wwwroot 
+
+ 
+
+
+
+And Create site content Folder in C:\inetpub\wwwroot
+ 
+
+
+
+
+Step 14: Right click on sites then click on Add websites.
+ 
+
+
+
+
+Step 15: Give Site name >> Give Physical path of folder >> Give Host name >> Click on ok.
+ 
+
+
+
+Step 16: Open Application pool >> Double click on test.com >> Select .Net CLR version  >> Ok
+
+ 
+
+
+Step 17: Right click on site name and click on edit bindings.
+ 
+
+
+
+Then click on Add 
+ 
+
+
+
+
+
+
+
+Step 18: Change type http to https and Enter the host name. check the box Require server name indication. Select SSL certificate and click on OK button.
+ 
+
+Step 19: Database Connection String setup in Site
+Open Site folder >> Right click on Appsettings.json >> open with Notepad++
+ 
+
+
+Enter Database details in the connection string and then save the file.
+ 
+
+
+
+
+
+Now the site is ready .
+ 
