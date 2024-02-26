@@ -26,3 +26,4 @@ scp -P "$REMOTE_PORT" "/root/backups_DB/db_backups-$(date --iso).tar.gz" "$REMOT
 
 # Remove local backup files
 rm -rf /root/backups_DB/*
+

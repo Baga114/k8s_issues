@@ -3,3 +3,21 @@ https://acme-v02.api.letsencrypt.org/directory
 
 
 then add the text record for the same. 
+
+sudo apt install certbot
+sudo apt install python3-certbot-nginx
+sudo certbot --nginx -d mail.viodle.com --register-unsafely-without-email
+   
+
+sudo apt install certbot
+sudo apt install python3-certbot-nginx
+sudo certbot --nginx -d app.woodfibrelng.ca --register-unsafely-without-email
+
+sudo certbot renew
+
+certbot certonly --force-renew -d example.com
+
+sudo certbot renew --dry-run
+
+wildcard ssl
+sudo certbot certonly --standalone -d *.customerdemourl.com --register-unsafely-without-email
